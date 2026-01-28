@@ -1,0 +1,44 @@
+name: Ubuntu Focal Fossa
+
+on: [push, pull_request]
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  ubuntu-focal:
+    runs-on: ubuntu-20.04
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    strategy:
+      matrix:
+        install_method:
+          - raw-bin
+          - curl-shorturl
+        branch:
+          - main
+          - develop
+        shell:
+          - {name: dash,        package: dash}
+          - {name: bash,        package: bash}
+          - {name: busybox ash, package: busybox}
+          - {name: ksh,         package: ksh}
+          - {name: mksh,        package: mksh}
+          - {name: posh,        package: posh}
+          - {name: yash,        package: yash}
+          - {name: zsh,         package: zsh}
+      fail-fast: false
+    name: "${{ matrix.install_method }} / ${{ matrix.branch }} / ${{ matrix.shell.name }}"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install shell (${{ matrix.shell.package }})
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{ matrix.shell.package }}
+
+      - name: Run tests
+        run: ./test-runner.sh
+        env:
+          MUSH_INSTALL_METHOD: ${{ matrix.install_method }}
+          MUSH_BRANCH: ${{ matrix.branch }}
+          MUSH_SHELL: ${{ matrix.shell.name }}
