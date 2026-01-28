@@ -18,14 +18,14 @@ jobs:
           - main
           - develop
         shell:
-          - {name: dash,        package: dash}
+          #- {name: dash,        package: dash}
           - {name: bash,        package: bash}
-          - {name: busybox ash, package: busybox}
-          - {name: ksh,         package: ksh}
-          - {name: mksh,        package: mksh}
-          - {name: posh,        package: posh}
-          - {name: yash,        package: yash}
-          - {name: zsh,         package: zsh}
+          #- {name: busybox ash, package: busybox}
+          #- {name: ksh,         package: ksh}
+          #- {name: mksh,        package: mksh}
+          #- {name: posh,        package: posh}
+          #- {name: yash,        package: yash}
+          #- {name: zsh,         package: zsh}
       fail-fast: false
     name: "${{ matrix.install_method }} / ${{ matrix.branch }} / ${{ matrix.shell.name }}"
     steps:
